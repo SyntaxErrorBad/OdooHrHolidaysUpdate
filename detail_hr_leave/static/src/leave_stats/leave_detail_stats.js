@@ -65,7 +65,6 @@ export class LeaveDetailStatsComponent extends LeaveStatsComponent {
 
                 acc[leaveType].push({
                     employeeId: leave.employee_id[0],
-                    // Если нет имени сотрудника, ставим "No Employee"
                     employeeName: leave.employee_id[1] || "No Employee",
                     dateFrom: formatDate(DateTime.fromSQL(leave.date_from, { zone: "utc" }).toLocal()),
                     dateTo: formatDate(DateTime.fromSQL(leave.date_to, { zone: "utc" }).toLocal()),
