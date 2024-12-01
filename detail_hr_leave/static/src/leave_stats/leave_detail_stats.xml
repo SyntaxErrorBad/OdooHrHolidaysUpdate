@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <div t-name="detail_hr_leave.LeaveDetailStatsComponent" class="o_leave_stats">
+        <div class="dropdown-container o_hr_leave_selection">
+            <select id="ViewType" name="ViewType" t-on-change="onLeaveTypeChange" t-att-value="state.viewType">
+                <option value="basic">Basic</option>
+                <option value="all_departments">All Departments</option>
+            </select>
+        </div>
+
+        <div t-if="state.viewType === 'all_departments'">
+            <div t-foreach="state.alldepartmentLeaves" t-as="department" t-key="department_index" t-attf-class="d-flex flex-column mb-8">
+                <div class="o_horizontal_separator o_hr_leave_title">
+                    <t t-esc="department.departmentName"/>
+                </div>
+
+                <div t-foreach="department.leaveTypes" t-as="leavetype" t-key="leavetype_index" class="leave-type mb-6">
+                    <div class="o_horizontal_separator o_hr_leave_subtitle o_hr_leave_margin_left">
+                        <t t-esc="leavetype.leaveTypeName"/>
+                    </div>
+
+                    <div t-foreach="leavetype.employees" t-as="employee" t-key="employee_index" class="employee-leave d-flex align-items-center">
+                        <div class="leave-period d-flex align-items-center o_hr_leave_margin_left">
+                            <span class="o_hr_leave_margin_left">
+                                <t t-esc="employee.employeeName"/> | <t t-esc="employee.dateFrom"/> - <t t-esc="employee.dateTo"/> | <t t-esc="employee.numberOfDays"/> day(s) | <t t-esc="employee.status"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div t-if="state.viewType === 'basic'">
+            <div t-if="employee" id="o_leave_stats_employee">
+                <div class="o_hr_leave_subtitle">
+                    <t t-esc="employee[1]"/> in <t t-esc="thisYear"/>
+                </div>
+                <div t-if="state.leaves.length === 0">
+                    None
+                </div>
+                <div t-foreach="state.leaves" t-as="leave" t-key="leave_index" class="d-flex flex-row justify-content-between">
+                    <span t-esc="leave.holiday_status_id[1]"/>
+                    <span><t t-esc="leave.number_of_days"/> day(s)</span>
+                </div>
+            </div>
+
+            <div t-if="department" id="o_leave_stats_department">
+                <div class="o_horizontal_separator o_hr_leave_subtitle">
+                    <t t-esc="department[1]"/>
+                </div>
+                <div t-if="state.departmentLeaves.length === 0">
+                    None
+                </div>
+                <div t-foreach="state.departmentLeaves" t-as="leave" t-key="leave_index" t-attf-class="d-flex flex-row justify-content-between {{leave.sameEmployee ? 'fw-bold': ''}}">
+                    <span><t t-esc="leave.employee_id[1]"/>: <t t-esc="leave.number_of_days"/> day(s)</span>
+                    <span><t t-esc="leave.dateFrom"/> - <t t-esc="leave.dateTo"/></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</templates>
